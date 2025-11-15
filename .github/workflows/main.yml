@@ -1,0 +1,54 @@
+            - název: cloudposse-pre-commit
+  # Můžete se připnout k přesnému commitu nebo k verzi.
+  # použití: cloudposse/github-action-pre-commit@828247764461bc41b2bd267e24d76e91a279b093
+  použití: cloudposse/github-action-pre-commit@v4.0.0
+  s:
+    # možnosti, které se mají předat běhu před commitem
+    extra_args: # volitelné, výchozí je --all-files
+    # token githubu pro klonování / push
+    token: # volitelný
+    # uživatelské jméno na githubu pro odeslání
+    git_user_name: # volitelné, výchozí je pre-commit
+    # e-mail uživatele githubu pro odeslání
+    git_user_email: # volitelné, výchozí je pre-commit@example.com
+    # zpráva commitu na GitHubu, se kterou se má pushnout
+    git_commit_message: # volitelné, výchozí nastavení jsou opravy před commitem
+            - název: Cache
+  použití: actions/cache@v4.3.0
+  s:
+    # Seznam souborů, adresářů a zástupných znaků pro uložení do mezipaměti a obnovení
+    cesta:
+    # Explicitní klíč pro obnovení a uložení mezipaměti
+    klíč:
+    # Seřazený víceřádkový řetězec vypisující klíče s odpovídajícím prefixem, které se používají k obnovení staré mezipaměti, pokud pro daný klíč nedošlo k žádnému zásahu do mezipaměti. Poznámka: `cache-hit` v tomto případě vrací hodnotu false.
+    restore-keys: # volitelné
+    # Velikost bloku použitého k rozdělení velkých souborů během nahrávání, v bajtech
+    velikost-bloku-nahrávání: # volitelné
+    # Volitelná booleovská hodnota, pokud je povolena, umožňuje spouštěčům Windows ukládat nebo obnovovat mezipaměti, které lze obnovit nebo uložit na jiných platformách.
+    enableCrossOsArchive: # volitelné, výchozí je false
+    # Selžení pracovního postupu, pokud není nalezen záznam mezipaměti
+    fail-on-cache-miss: # volitelné, výchozí je false
+    # Zkontroluje, zda pro daný vstup (klíč, restore-keys) existuje položka mezipaměti bez stahování mezipaměti
+    pouze vyhledávání: # volitelné, výchozí nastavení je false
+    # Spusťte krok post pro uložení mezipaměti, i když předchozí krok selže
+    save-always: # volitelné, výchozí je false
+            - název: Stáhnout artefakt sestavení
+  použití: actions/download-artifact@v6.0.0
+  s:
+    # Název artefaktu ke stažení. Pokud není zadán, stáhnou se všechny artefakty pro daný běh.
+    jméno: # volitelné
+    # ID artefaktů ke stažení, oddělená čárkami. Lze použít buď vstupy `artefact-ids`, nebo `name`, ale ne oba.
+    ID artefaktů: # volitelné
+    # Cílová cesta. Podporuje základní rozšíření vlnovkou. Výchozí hodnota je $GITHUB_WORKSPACE
+    cesta: # volitelné
+    # Globální vzor odpovídající artefaktům, které mají být staženy. Ignorováno, pokud je zadán název.
+    vzor: # volitelné
+    # Pokud se shoduje více artefaktů, změní se chování cílových adresářů. Pokud je hodnota true, stažené artefakty budou ve stejném adresáři určeném parametrem path. Pokud je hodnota false, stažené artefakty budou extrahovány do jednotlivých pojmenovaných adresářů v rámci zadané cesty.
+    merge-multiple: # volitelné, výchozí je false
+    # Token GitHubu použitý k ověření pomocí API GitHubu. Je vyžadován při stahování artefaktů z jiného repozitáře nebo z jiného běhu pracovního postupu. Pokud není zadán, akce se pokusí stáhnout artefakty z aktuálního repozitáře a aktuálního běhu pracovního postupu.
+    github-token: # volitelné
+    # Vlastník repozitáře a jeho název spojené znakem "/". Pokud je zadán github-token, jedná se o repozitář, ze kterého budou artefakty staženy.
+    repozitář: # volitelné, výchozí je ${{ github.repository }}
+    # ID běhu workflowu, ze kterého byl nahrán požadovaný artefakt stahování. Pokud je zadán github-token, jedná se o běh, ze kterého budou artefakty staženy.
+    run-id: # volitelné, výchozí je ${{ github.run_id }}
+                              
