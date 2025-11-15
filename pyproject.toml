@@ -32,6 +32,9 @@ python = "^3.8.1"
 pydantic = "^2.0.0"
 aiofiles = "^23.0.0"
 tenacity = "^8.0.0"
+fastapi = "^0.104.0"
+uvicorn = {extras = ["standard"], version = "^0.24.0"}
+sse-starlette = "^1.8.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
@@ -45,6 +48,7 @@ mypy = "^1.0.0"
 
 [tool.poetry.scripts]
 claude-cli-auth = "claude_cli_auth.cli:main"
+claude-api-proxy = "claude_cli_auth.api_proxy:main"
 
 [tool.black]
 line-length = 88

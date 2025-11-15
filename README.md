@@ -9,7 +9,8 @@ A production-ready Python module for **Claude AI integration without API keys**.
 ## 🎯 Key Features
 
 - **🔑 No API Keys Required** - Uses `claude auth login` authentication
-- **💳 Subscription Compatible** - Works with Claude subscription instead of API access  
+- **💳 Subscription Compatible** - Works with Claude subscription instead of API access
+- **🌐 OpenAI-Compatible API Proxy** - Expose your subscription as an OpenAI-compatible REST API
 - **🔄 Triple Fallback System** - SDK → CLI → Graceful error handling
 - **💾 Session Management** - Persistent conversations and context
 - **⚡ Production Ready** - Comprehensive error handling and logging
@@ -269,6 +270,67 @@ async def ask_claude(question):
 result = await ask_claude("Explain machine learning in simple terms")
 print(result)
 ```
+
+## 🌐 OpenAI-Compatible API Proxy
+
+**NEW!** Use your Claude subscription as an OpenAI-compatible REST API!
+
+### Why Use the API Proxy?
+
+- ✅ Use subscription pricing instead of expensive API rates
+- ✅ Compatible with OpenAI client libraries and tools
+- ✅ Enable remote access to Claude Code
+- ✅ Integrate with LangChain, AutoGPT, and other frameworks
+
+### Quick Start
+
+```bash
+# Start the proxy server
+claude-api-proxy --port 8000
+
+# Use with any OpenAI-compatible client
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'
+```
+
+### With OpenAI Python Client
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://localhost:8000/v1",
+    api_key="dummy-key"  # Not validated
+)
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+print(response.choices[0].message.content)
+```
+
+### With LangChain
+
+```python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url="http://localhost:8000/v1",
+    api_key="dummy-key",
+    model="claude-sonnet-4"
+)
+
+response = llm.invoke("Explain quantum computing")
+print(response.content)
+```
+
+**📖 Full documentation:** [API_PROXY.md](API_PROXY.md)
 
 ## 🔒 Security & Privacy
 
