@@ -62,6 +62,16 @@ from .facade import ClaudeAuthManager
 from .models import AuthConfig, ClaudeResponse, SessionInfo, StreamUpdate
 from .sdk_interface import SDKInterface
 
+# API Proxy is optional - only import if FastAPI is available
+try:
+    from .api_proxy import ClaudeAPIProxy, ChatCompletionRequest, ChatMessage
+    _API_PROXY_AVAILABLE = True
+except ImportError:
+    _API_PROXY_AVAILABLE = False
+    ClaudeAPIProxy = None  # type: ignore
+    ChatCompletionRequest = None  # type: ignore
+    ChatMessage = None  # type: ignore
+
 # Version info
 __version__ = "1.0.0"
 __author__ = "David Strejc"
@@ -72,22 +82,27 @@ __license__ = "MIT"
 __all__ = [
     # Main interface
     "ClaudeAuthManager",
-    
+
     # Core components
-    "AuthManager", 
+    "AuthManager",
     "CLIInterface",
     "SDKInterface",
-    
+
+    # API Proxy (optional)
+    "ClaudeAPIProxy",
+    "ChatCompletionRequest",
+    "ChatMessage",
+
     # Models
     "AuthConfig",
     "ClaudeResponse",
-    "CLIResponse", 
+    "CLIResponse",
     "SessionInfo",
     "StreamUpdate",
-    
+
     # Exceptions
     "ClaudeAuthError",
-    "ClaudeAuthManagerError", 
+    "ClaudeAuthManagerError",
     "ClaudeCLIError",
     "ClaudeConfigError",
     "ClaudeNetworkError",
@@ -96,10 +111,10 @@ __all__ = [
     "ClaudeSessionError",
     "ClaudeTimeoutError",
     "ClaudeToolValidationError",
-    
+
     # Metadata
     "__version__",
-    "__author__", 
+    "__author__",
     "__email__",
     "__license__",
 ]
