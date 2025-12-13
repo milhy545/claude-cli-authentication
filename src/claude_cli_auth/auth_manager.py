@@ -115,9 +115,8 @@ class AuthManager:
                 return True
             else:
                 logger.warning(
-                    "Claude auth command failed", 
-                    returncode=result.returncode,
-                    stderr=result.stderr.strip()
+                    f"Claude auth command failed - returncode: {result.returncode}, "
+                    f"stderr: {result.stderr.strip()}"
                 )
                 return False
                 
