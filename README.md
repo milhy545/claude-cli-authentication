@@ -68,6 +68,40 @@ response = await claude.query(
 print(response.content)
 ```
 
+## 🧪 Running Tests
+
+This project includes a comprehensive test suite covering unit, integration, and end-to-end scenarios.
+
+### Prerequisites
+
+1. **Install Dependencies:**
+   ```bash
+   poetry install
+   ```
+
+2. **Verify Environment:**
+   Run the environment check script to ensure Node.js, Claude CLI, and authentication are properly set up:
+   ```bash
+   python scripts/check_env.py
+   ```
+
+### Running Tests
+
+**Unit Tests (Offline):**
+These tests mock the Claude CLI and do not require authentication or internet access.
+```bash
+poetry run pytest tests/test_basic.py tests/test_cli_parsing.py tests/test_config_fallback.py tests/test_robustness.py
+```
+
+**E2E Live Tests (Online):**
+These tests interact with the real Claude API via CLI. They require authentication (`claude auth login`) and will consume tokens/cost.
+To enable them, set the `RUN_LIVE_TESTS` environment variable:
+```bash
+export RUN_LIVE_TESTS=1
+poetry run pytest tests/test_e2e_live.py
+```
+*Note: If you are not authenticated, these tests will be skipped automatically.*
+
 ## 📚 Complete Documentation
 
 ### Configuration

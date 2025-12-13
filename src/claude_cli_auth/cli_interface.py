@@ -453,10 +453,8 @@ class CLIInterface:
                                 await stream_callback(update)
                             except Exception as e:
                                 logger.warning(
-                                    "Stream callback failed",
-                                    error=str(e),
-                                    update_type=update.type,
-                                    process_id=process_id,
+                                    f"Stream callback failed - error: {str(e)}, "
+                                    f"update_type: {update.type}, process_id: {process_id}"
                                 )
                     
                     # Check for final result
@@ -466,10 +464,8 @@ class CLIInterface:
                 except json.JSONDecodeError as e:
                     parsing_errors.append(f"JSON error: {str(e)}")
                     logger.debug(
-                        "JSON parsing failed",
-                        line=line[:200],
-                        error=str(e),
-                        process_id=process_id,
+                        f"JSON parsing failed - line: {line[:200]}, "
+                        f"error: {str(e)}, process_id: {process_id}"
                     )
                     continue
             
@@ -482,10 +478,8 @@ class CLIInterface:
                 stderr_text = stderr.decode("utf-8", errors="replace")
                 
                 logger.error(
-                    "Claude process failed",
-                    return_code=return_code,
-                    stderr=stderr_text[:500],
-                    process_id=process_id,
+                    f"Claude process failed - return_code: {return_code}, "
+                    f"stderr: {stderr_text[:500]}, process_id: {process_id}"
                 )
                 
                 # Handle specific error types
@@ -499,10 +493,8 @@ class CLIInterface:
             # Parse final result
             if not result_message:
                 logger.error(
-                    "No result message received",
-                    message_count=len(message_buffer),
-                    parsing_errors=len(parsing_errors),
-                    process_id=process_id,
+                    f"No result message received - message_count: {len(message_buffer)}, "
+                    f"parsing_errors: {len(parsing_errors)}, process_id: {process_id}"
                 )
                 
                 raise ClaudeParsingError(
@@ -525,12 +517,9 @@ class CLIInterface:
             )
             
             logger.debug(
-                "Parsed Claude response",
-                content_length=len(response.content),
-                cost=response.cost,
-                tools_used=len(response.tools_used),
-                parsing_errors=len(parsing_errors),
-                process_id=process_id,
+                f"Parsed Claude response - content_length: {len(response.content)}, "
+                f"cost: {response.cost}, tools_used: {len(response.tools_used)}, "
+                f"parsing_errors: {len(parsing_errors)}, process_id: {process_id}"
             )
             
             return response
@@ -540,10 +529,8 @@ class CLIInterface:
                 raise
             else:
                 logger.error(
-                    "Unexpected error in output handling",
-                    error=str(e),
-                    error_type=type(e).__name__,
-                    process_id=process_id,
+                    f"Unexpected error in output handling - error: {str(e)}, "
+                    f"error_type: {type(e).__name__}, process_id: {process_id}"
                 )
                 
                 raise ClaudeParsingError(
@@ -719,7 +706,14 @@ class CLIInterface:
     
     def _parse_error_update(self, msg: Dict[str, Any]) -> StreamUpdate:
         """Parse error message for streaming."""
-        error_message = msg.get("message", msg.get("error", str(msg)))
+        # Try to get error content
+        error_data = msg.get("message") or msg.get("error") or msg
+
+        # If error_data is a dictionary, try to extract message field
+        if isinstance(error_data, dict):
+            error_message = error_data.get("message") or str(error_data)
+        else:
+            error_message = str(error_data)
         
         return StreamUpdate(
             type=StreamType.ERROR,
